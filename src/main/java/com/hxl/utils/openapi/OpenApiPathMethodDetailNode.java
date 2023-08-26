@@ -24,7 +24,6 @@ public class OpenApiPathMethodDetailNode extends OpenApiNode {
         set("requestBody", openApiRequestBodyNode);
         return this;
     }
-
     public OpenApiPathMethodDetailNode addParameter(OpenApiUrlParameter parameter) {
         ((OpenApiUrlParameterNode) get("parameters")).add(parameter);
         return this;

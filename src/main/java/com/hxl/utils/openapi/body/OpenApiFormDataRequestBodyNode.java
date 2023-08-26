@@ -6,7 +6,6 @@ public class OpenApiFormDataRequestBodyNode extends OpenApiRequestBodyNode {
     public OpenApiFormDataRequestBodyNode(ObjectProperties properties) {
         super(properties);
     }
-
     @Override
     public String getRequestType() {
         return "multipart/form-data";

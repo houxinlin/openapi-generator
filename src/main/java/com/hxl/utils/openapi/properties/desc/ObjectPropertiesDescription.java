@@ -5,7 +5,6 @@ import com.hxl.utils.openapi.Type;
 import com.hxl.utils.openapi.properties.Properties;
 
 import java.util.List;
-
 public class ObjectPropertiesDescription  extends BasicPropertiesDescription{
     public ObjectPropertiesDescription(List<Properties> leafDescriptions, String description) {
         super(Type.object,description);
