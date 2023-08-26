@@ -31,86 +31,88 @@
 {
   "openapi": "3.0.0",
   "paths": {
-    "/user/get/{
-    userId
-  }": {
-  "get": {
-    "summary": "获取用户",
-    "requestBody": {
-      "content": {
-        "application/json": {
-          "schema": {
-            "type": "object",
-            "properties": {
-              "a": {
-                "description": "描述",
+    "/user/get/{userId}": {
+      "get": {
+        "summary": "获取用户",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
                 "type": "object",
                 "properties": {
                   "a": {
                     "description": "描述",
-                    "type": "string"
-                  }
-                }
-              },
-              "address": {
-                "description": "地址",
-                "type": "object",
-                "properties": {
-                  "area": {
-                    "description": "区域",
+                    "type": "object",
+                    "properties": {
+                      "a": {
+                        "description": "描述",
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "sss": {
+                    "description": "描述",
                     "type": "string"
                   },
-                  "city": {
-                    "description": "城市",
+                  "address": {
+                    "description": "地址",
+                    "type": "object",
+                    "properties": {
+                      "area": {
+                        "description": "区域",
+                        "type": "string"
+                      },
+                      "city": {
+                        "description": "城市",
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "test": {
+                    "description": "测试",
                     "type": "string"
                   }
                 }
-              },
-              "test": {
-                "description": "测试",
-                "type": "string"
               }
             }
           }
-        }
-      }
-    },
-    "responses": {
-      "200": {
-        "description": "响应成功"
-      }
-    },
-    "parameters": [
-      {
-        "schema": {
-          "type": "number"
         },
-        "in": "path",
-        "name": "userId",
-        "description": "sdd",
-        "required": true
-      },
-      {
-        "schema": {
-          "type": "string"
+        "responses": {
+          "200": {
+            "description": "响应成功"
+          }
         },
-        "in": "header",
-        "name": "name",
-        "description": "asd",
-        "required": false
-      },
-      {
-        "schema": {
-          "type": "boolean"
-        },
-        "in": "query",
-        "name": "urlpaa",
-        "description": "asd",
-        "required": false
+        "parameters": [
+          {
+            "schema": {
+              "type": "number"
+            },
+            "in": "path",
+            "name": "userId",
+            "description": "sdd",
+            "required": true
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "name",
+            "description": "asd",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "boolean"
+            },
+            "in": "query",
+            "name": "urlpaa",
+            "description": "asd",
+            "required": false
+          }
+        ]
       }
-    ]
+    }
   }
-}
-}
 }
 ```
