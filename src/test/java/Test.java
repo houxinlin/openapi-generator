@@ -13,7 +13,13 @@ import com.hxl.utils.openapi.response.OpenApiStatusCodeResponse;
 
 public class Test {
     public static void main(String[] args) {
-        OpenApiStatusCodeResponse openApiStatusCodeResponse = new OpenApiStatusCodeResponse(200, new OpenApiResponseDetailNode("响应成功"));
+        PropertiesBuilder propertiesBuilder = new PropertiesBuilder()
+                .addObjectProperties("type",(b)->{
+                    b.addBooleanProperties("name","a");
+                },"描述")
+                .addStringProperties("a", "描述");
+        OpenApiStatusCodeResponse openApiStatusCodeResponse =
+                new OpenApiStatusCodeResponse(200, new OpenApiResponseDetailNode("响应成功","application/json",propertiesBuilder.object()));
 
         ObjectProperties object = new PropertiesBuilder()
                 .addObjectProperties("a", (v) -> {
