@@ -9,7 +9,7 @@ public abstract class OpenApiBuilder {
     public OpenApiPathMethodDetailNode getOpenApiPathMethodDetailNode() {
         return openApiPathMethodDetailNode;
     }
-    private static  OpenApiBuilder create(String url, String summary,HttpMethod method){
+    public static  OpenApiBuilder create(String url, String summary,HttpMethod method){
         OpenApiBuilderImpl openApiBuilder = new OpenApiBuilderImpl(url, method);
         openApiBuilder.getOpenApiPathMethodDetailNode().setSummary(summary);
         return openApiBuilder;
@@ -46,5 +46,5 @@ public abstract class OpenApiBuilder {
         openApiPathMethodDetailNode.setResponse(openApiStatusCodeResponse);
         return this;
     }
-    public abstract OpenApi build() ;
+    public abstract void  addToOpenApi(OpenApi api) ;
 }

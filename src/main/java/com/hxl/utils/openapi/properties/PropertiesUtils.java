@@ -13,6 +13,9 @@ public class PropertiesUtils {
     public static Properties createInteger(String name, String description){
         return  new Properties(name,new BasicPropertiesDescription(Type.integer,description));
     }
+    public static Properties createFile(String name, String description){
+        return  new Properties(name,new BasicPropertiesDescription(Type.file,description));
+    }
     public static Properties createKeyValueObject(String key, List<Properties> properties, String description) {
         return new Properties(key,new ObjectPropertiesDescription(properties,description));
     }

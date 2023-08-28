@@ -1,6 +1,5 @@
 package com.hxl.utils.openapi;
 
-import com.google.gson.Gson;
 
 public class OpenApi extends OpenApiNode {
     public OpenApi() {
@@ -13,7 +12,5 @@ public class OpenApi extends OpenApiNode {
         return this;
     }
 
-    public String toJSON() {
-        return new Gson().toJson(this);
-    }
+
 }

@@ -1,8 +1,17 @@
 package com.hxl.utils.openapi;
 
 public enum Type {
-    file,string,integer,number,array,object,_boolean,any;
-    public String getTargetValue(){
-        return  this.toString().replace("_","");
+    file, string, integer, number, array, object, _boolean, any;
+
+    public String getTargetValue() {
+        return this.toString().replace("_", "");
+    }
+
+    public static Type parse(String name, Type def) {
+        try {
+            return Type.valueOf(name);
+        } catch (Exception e) {
+        }
+        return def;
     }
 }
