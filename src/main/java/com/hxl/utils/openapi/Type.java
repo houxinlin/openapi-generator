@@ -5,4 +5,11 @@ public enum Type {
     public String getTargetValue(){
         return  this.toString().replace("_","");
     }
+
+    public static Type parse(String name,Type def){
+        try {
+            return Type.valueOf(name.toLowerCase());
+        }catch (Exception e){}
+        return def;
+    }
 }

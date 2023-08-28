@@ -1,7 +1,5 @@
 import com.hxl.utils.openapi.*;
 import com.hxl.utils.openapi.body.OpenApiApplicationJSONBodyNode;
-import com.hxl.utils.openapi.body.OpenApiFormDataRequestBodyNode;
-import com.hxl.utils.openapi.body.OpenApiFormUrlencodedBodyNode;
 import com.hxl.utils.openapi.body.OpenApiRequestBodyNode;
 import com.hxl.utils.openapi.parameter.OpenApiHeaderParameterNode;
 import com.hxl.utils.openapi.parameter.OpenApiUrlPathParameter;
@@ -28,12 +26,12 @@ public class Test {
 
         OpenApiRequestBodyNode openApiRequestBodyNode = new OpenApiApplicationJSONBodyNode(object);
 
-        OpenApi api = OpenApiBuilder.get("/user/get/{userId}", "获取用户")
+        OpenApi api = new OpenApi();
+        OpenApiBuilder.get("/user/get/{userId}", "获取用户")
                 .addParameter(new OpenApiUrlPathParameter("userId", "sdd", true, Type.number))
                 .addParameter(new OpenApiHeaderParameterNode("name", "asd", false, Type.string))
                 .addParameter(new OpenApiUrlQueryParameter("urlpaa", "asd", false, Type._boolean))
                 .setRequestBody(openApiRequestBodyNode)
-                .setResponse(openApiStatusCodeResponse).build();
-        System.out.println(api.toJSON());
+                .setResponse(openApiStatusCodeResponse).addToOpenApi(api);
     }
 }

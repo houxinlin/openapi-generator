@@ -13,7 +13,4 @@ public class OpenApi extends OpenApiNode {
         return this;
     }
 
-    public String toJSON() {
-        return new Gson().toJson(this);
-    }
 }

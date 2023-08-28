@@ -7,7 +7,8 @@ public class OpenApiBuilderImpl extends BasicOpenApiBuilder {
         this.httpMethod = httpMethod;
     }
     @Override
-    public OpenApi build() {
-        return new OpenApi().putPath(new OpenApiPathItemNode(getUrl(), new OpenApiPathMethodNode(httpMethod, getOpenApiPathMethodDetailNode())));
+    public void addToOpenApi(OpenApi openApi) {
+        openApi.putPath(new OpenApiPathItemNode(getUrl(), new OpenApiPathMethodNode(httpMethod, getOpenApiPathMethodDetailNode())));
+//        return new OpenApi().putPath(new OpenApiPathItemNode(getUrl(), new OpenApiPathMethodNode(httpMethod, getOpenApiPathMethodDetailNode())));
     }
 }
