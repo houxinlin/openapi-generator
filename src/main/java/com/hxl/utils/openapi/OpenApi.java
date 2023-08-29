@@ -6,11 +6,8 @@ public class OpenApi extends OpenApiNode {
         set("openapi", "3.0.0");
         set("paths", new OpenApiNode());
     }
-
     public OpenApi putPath(OpenApiPathItemNode apiNode) {
         ((OpenApiNode) get("paths")).put(apiNode.getUrlPath(), apiNode.getMethodNode());
         return this;
     }
-
-
 }
