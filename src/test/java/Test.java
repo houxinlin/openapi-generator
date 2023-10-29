@@ -35,19 +35,13 @@ public class Test {
         //一个openapi只需要一个OpenApi实例
         //使用OpenApiBuilder创建不同的http请求，通过addToOpenApi添加到OpenApi实例,通过任意json序列化库直接将OpenApi转换为json
         OpenApi openApi = new OpenApi();
-        OpenApiBuilder.get("/user/get/{userId}", "获取用户")
+        System.out.println(OpenApiBuilder.get("/user/get/{userId}", "获取用户")
                 .addParameter(new OpenApiUrlPathParameter("userId", "sdd", true, Type.number))
                 .addParameter(new OpenApiHeaderParameterNode("name", "asd", false, Type.string))
                 .addParameter(new OpenApiUrlQueryParameter("urlpaa", "asd", false, Type._boolean))
                 .setRequestBody(openApiRequestBodyNode)
-                .setResponse(openApiStatusCodeResponse).addToOpenApi(openApi);
+                .setResponse(openApiStatusCodeResponse).toCurl());
 
-        OpenApiBuilder.get("/user/set/{userId}", "设置用户")
-                .addParameter(new OpenApiUrlPathParameter("userId", "sdd", true, Type.number))
-                .addParameter(new OpenApiHeaderParameterNode("name", "asd", false, Type.string))
-                .addParameter(new OpenApiUrlQueryParameter("urlpaa", "asd", false, Type._boolean))
-                .setRequestBody(openApiRequestBodyNode)
-                .setResponse(openApiStatusCodeResponse).addToOpenApi(openApi);
 
     }
 }

@@ -47,4 +47,7 @@ public abstract class OpenApiBuilder {
         return this;
     }
     public abstract void  addToOpenApi(OpenApi api) ;
+
+    public abstract String toCurl();
+
 }
