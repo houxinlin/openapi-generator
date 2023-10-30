@@ -1,7 +1,7 @@
 import com.hxl.utils.openapi.*;
 import com.hxl.utils.openapi.body.OpenApiApplicationJSONBodyNode;
 import com.hxl.utils.openapi.body.OpenApiRequestBodyNode;
-import com.hxl.utils.openapi.parameter.OpenApiHeaderParameterNode;
+import com.hxl.utils.openapi.parameter.OpenApiHeaderParameter;
 import com.hxl.utils.openapi.parameter.OpenApiUrlPathParameter;
 import com.hxl.utils.openapi.parameter.OpenApiUrlQueryParameter;
 import com.hxl.utils.openapi.properties.*;
@@ -20,9 +20,7 @@ public class Test {
                 new OpenApiStatusCodeResponse(200, new OpenApiResponseDetailNode("响应成功", "application/json", propertiesBuilder.object()));
 
         ObjectProperties object = new PropertiesBuilder()
-                .addObjectProperties("a", (v) -> {
-                    v.addProperties("a", "描述", Type.string);
-                }, "描述")
+                .addObjectProperties("a", (v) -> v.addProperties("a", "描述", Type.string), "描述")
                 .addStringProperties("sss", "描述")
                 .addProperties("test", "测试", Type.string)
                 .addObjectProperties("address", (v) -> {
@@ -35,13 +33,14 @@ public class Test {
         //一个openapi只需要一个OpenApi实例
         //使用OpenApiBuilder创建不同的http请求，通过addToOpenApi添加到OpenApi实例,通过任意json序列化库直接将OpenApi转换为json
         OpenApi openApi = new OpenApi();
-        System.out.println(OpenApiBuilder.get("/user/get/{userId}", "获取用户")
+        String curl = OpenApiBuilder.get("/user/get/{userId}", "获取用户")
                 .addParameter(new OpenApiUrlPathParameter("userId", "sdd", true, Type.number))
-                .addParameter(new OpenApiHeaderParameterNode("name", "asd", false, Type.string))
+                .addParameter(new OpenApiHeaderParameter("name", "asd", false, Type.string))
                 .addParameter(new OpenApiUrlQueryParameter("urlpaa", "asd", false, Type._boolean))
                 .setRequestBody(openApiRequestBodyNode)
-                .setResponse(openApiStatusCodeResponse).toCurl());
+                .setResponse(openApiStatusCodeResponse).toCurl();
+        System.out.println(curl);
 
-
+        System.out.println(openApi);
     }
 }
