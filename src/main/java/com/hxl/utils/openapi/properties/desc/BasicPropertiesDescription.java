@@ -7,35 +7,36 @@ import com.hxl.utils.openapi.utils.JsonHashMap;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 public class BasicPropertiesDescription extends PropertiesDescription {
     public BasicPropertiesDescription(Type type, String description) {
         super(type, description);
     }
 
-    private Object doGetDefaultValue(BasicPropertiesDescription basicPropertiesDescription) {
+    public Object doGetDefaultValue(BasicPropertiesDescription basicPropertiesDescription,BiFunction<BasicPropertiesDescription,OpenApiNode,Object> factory) {
         if (Type.string.toString().equalsIgnoreCase(basicPropertiesDescription.getOrDefault("type", "").toString())) {
             return "\"\"";
         }
-        if (Type.number.toString().equalsIgnoreCase(basicPropertiesDescription.getOrDefault("type", "").toString())) {
+        if (Type.number.toString().equalsIgnoreCase(basicPropertiesDescription.getOrDefault("type", "").toString()) ||
+                Type.integer.toString().equalsIgnoreCase(basicPropertiesDescription.getOrDefault("type", "").toString())) {
             return 0;
         }
         if (Type.object.toString().equalsIgnoreCase(basicPropertiesDescription.getOrDefault("type", "").toString())) {
             if (this.containsKey("properties")) {
-                Map<String,Object> result =new JsonHashMap<>();
+
+
                 OpenApiNode openApiNode = (OpenApiNode) get("properties");
-                for (String key: openApiNode.keySet()) {
-                    if (openApiNode.get(key) instanceof BasicPropertiesDescription){
-                        result.put(key,doGetDefaultValue(((BasicPropertiesDescription) openApiNode.get(key))));
-                    }
-                }
-                return result;
+
+                return  factory.apply(this,openApiNode);
+//                fa.apply({})
             }
         }
         return "\"\"";
     }
 
-    public Object getDefaultValue() {
-        return doGetDefaultValue(this);
+    public Object getDefaultValue(BiFunction<BasicPropertiesDescription,OpenApiNode,Object> factory) {
+        return doGetDefaultValue(this,factory);
     }
 }

@@ -1,5 +1,6 @@
 import com.hxl.utils.openapi.*;
 import com.hxl.utils.openapi.body.OpenApiApplicationJSONBodyNode;
+import com.hxl.utils.openapi.body.OpenApiFormUrlencodedBodyNode;
 import com.hxl.utils.openapi.body.OpenApiRequestBodyNode;
 import com.hxl.utils.openapi.parameter.OpenApiHeaderParameter;
 import com.hxl.utils.openapi.parameter.OpenApiUrlPathParameter;
@@ -28,7 +29,7 @@ public class Test {
                     v.addProperties("area", "区域", Type.string);
                 }, "地址").object();
 
-        OpenApiRequestBodyNode openApiRequestBodyNode = new OpenApiApplicationJSONBodyNode(object);
+        OpenApiRequestBodyNode openApiRequestBodyNode = new OpenApiFormUrlencodedBodyNode(object);
 
         //一个openapi只需要一个OpenApi实例
         //使用OpenApiBuilder创建不同的http请求，通过addToOpenApi添加到OpenApi实例,通过任意json序列化库直接将OpenApi转换为json
