@@ -13,11 +13,14 @@ import com.hxl.utils.openapi.utils.JsonHashMap;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.BiFunction;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class OpenApiBuilderImpl extends BasicOpenApiBuilder {
     private final HttpMethod httpMethod;
-    private final BiFunction<BasicPropertiesDescription, OpenApiNode, Object> DEFAULT_OBJECT_FACTORY= new BiFunction<BasicPropertiesDescription, OpenApiNode, Object>() {
+    private final BiFunction<BasicPropertiesDescription, OpenApiNode, Object> DEFAULT_OBJECT_FACTORY = new BiFunction<BasicPropertiesDescription, OpenApiNode, Object>() {
         @Override
         public Object apply(BasicPropertiesDescription basicPropertiesDescription, OpenApiNode openApiNode) {
             Map<String, Object> result = new JsonHashMap<>();
@@ -42,6 +45,11 @@ public class OpenApiBuilderImpl extends BasicOpenApiBuilder {
 
     @Override
     public String toCurl() {
+        return toCurl(s -> null, s -> null, () -> null);
+    }
+
+    @Override
+    public String toCurl(Function<String, Object> headerValueFactory, Function<String, Object> queryValueFactory, Supplier<String> requestBodyCacheGet) {
         Curl curl = new Curl(httpMethod, getUrl());
         OpenApiPathMethodDetailNode openApiPathMethodDetailNode = getOpenApiPathMethodDetailNode();
         if (openApiPathMethodDetailNode.get("parameters") != null) {
@@ -49,11 +57,13 @@ public class OpenApiBuilderImpl extends BasicOpenApiBuilder {
             for (OpenApiUrlParameter parameter : parameters) {
                 if (parameter instanceof OpenApiHeaderParameter) {
                     OpenApiHeaderParameter openApiHeaderParameter = (OpenApiHeaderParameter) parameter;
-                    curl.addHeader(openApiHeaderParameter.get("name").toString(), "");
+                    String name = openApiHeaderParameter.get("name").toString();
+                    curl.addHeader(name, Optional.ofNullable(headerValueFactory.apply(name).toString()).orElse(""));
                 }
                 if (parameter instanceof OpenApiUrlQueryParameter) {
                     OpenApiUrlQueryParameter openApiUrlQueryParameter = (OpenApiUrlQueryParameter) parameter;
-                    curl.addQuery(openApiUrlQueryParameter.get("name").toString(), "");
+                    String name = openApiUrlQueryParameter.get("name").toString();
+                    curl.addQuery(name, Optional.ofNullable(queryValueFactory.apply(name).toString()).orElse(""));
 
                 }
             }
@@ -67,15 +77,15 @@ public class OpenApiBuilderImpl extends BasicOpenApiBuilder {
             if (o instanceof BodyContentUtils.Schema) {
                 BodyContentUtils.Schema schema = (BodyContentUtils.Schema) o;
                 OpenApiNode properties = (OpenApiNode) schema.get("properties");
+                String cacheRequestBody = requestBodyCacheGet.get();
                 if ("application/json".equalsIgnoreCase(requestBody.getRequestType())) {
-                    curl.setRequestBody(requestBody.getRequestType(), getBodyFormJsonApplication(properties));
+                    curl.setRequestBody(requestBody.getRequestType(), cacheRequestBody == null ? getBodyFormJsonApplication(properties) : cacheRequestBody);
                 }
                 if ("application/x-www-form-urlencoded".equalsIgnoreCase(requestBody.getRequestType()) ||
                         "multipart/form-data".equalsIgnoreCase(requestBody.getRequestType())) {
-                    curl.setRequestBody(requestBody.getRequestType(), getBodyFormUrlencoded(properties));
+                    curl.setRequestBody(requestBody.getRequestType(), cacheRequestBody == null ? getBodyFormUrlencoded(properties):cacheRequestBody);
                 }
             }
-
         }
         return curl.toString();
     }

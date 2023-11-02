@@ -4,6 +4,9 @@ import com.hxl.utils.openapi.body.OpenApiRequestBodyNode;
 import com.hxl.utils.openapi.parameter.OpenApiUrlParameter;
 import com.hxl.utils.openapi.response.OpenApiStatusCodeResponse;
 
+import java.util.function.Function;
+import java.util.function.Supplier;
+
 public abstract class OpenApiBuilder {
     private final OpenApiPathMethodDetailNode openApiPathMethodDetailNode = new OpenApiPathMethodDetailNode();
     public OpenApiPathMethodDetailNode getOpenApiPathMethodDetailNode() {
@@ -48,6 +51,6 @@ public abstract class OpenApiBuilder {
     }
     public abstract void  addToOpenApi(OpenApi api) ;
 
+    public abstract String toCurl(Function<String,Object> headerValueFactory, Function<String,Object> queryValueFactory, Supplier<String> requestBodyCacheGet);
     public abstract String toCurl();
-
 }
