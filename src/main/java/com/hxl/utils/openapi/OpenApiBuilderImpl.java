@@ -32,22 +32,18 @@ public class OpenApiBuilderImpl extends BasicOpenApiBuilder {
             return result;
         }
     };
-
     public OpenApiBuilderImpl(String url, HttpMethod httpMethod) {
         super(url);
         this.httpMethod = httpMethod;
     }
-
     @Override
     public void addToOpenApi(OpenApi api) {
         api.putPath(new OpenApiPathItemNode(getUrl(), new OpenApiPathMethodNode(httpMethod, getOpenApiPathMethodDetailNode())));
     }
-
     @Override
     public String toCurl() {
         return toCurl(s -> null, s -> null, () -> null);
     }
-
     @Override
     public String toCurl(Function<String, Object> headerValueFactory, Function<String, Object> queryValueFactory, Supplier<String> requestBodyCacheGet) {
         Curl curl = new Curl(httpMethod, getUrl());
@@ -85,6 +81,7 @@ public class OpenApiBuilderImpl extends BasicOpenApiBuilder {
                         "multipart/form-data".equalsIgnoreCase(requestBody.getRequestType())) {
                     curl.setRequestBody(requestBody.getRequestType(), cacheRequestBody == null ? getBodyFormUrlencoded(properties):cacheRequestBody);
                 }
+                curl.addHeaderIfMiss("content-type",requestBody.getRequestType());
             }
         }
         return curl.toString();

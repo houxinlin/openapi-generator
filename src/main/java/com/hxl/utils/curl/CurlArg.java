@@ -2,11 +2,17 @@ package com.hxl.utils.curl;
 
 public class CurlArg {
     private CurlArgsKey curlArgsKey;
-    private String value;
+    private final String value;
 
-    public CurlArg(CurlArgsKey curlArgsKey, String value) {
+    private final String id;
+    public CurlArg(CurlArgsKey curlArgsKey,String id, String value) {
         this.curlArgsKey = curlArgsKey;
         this.value = value;
+        this.id=id;
+    }
+
+    public String getId() {
+        return id;
     }
 
     @Override
