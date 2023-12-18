@@ -3,7 +3,6 @@ package com.hxl.utils.curl;
 public class CurlArg {
     private CurlArgsKey curlArgsKey;
     private final String value;
-
     private final String id;
     public CurlArg(CurlArgsKey curlArgsKey,String id, String value) {
         this.curlArgsKey = curlArgsKey;

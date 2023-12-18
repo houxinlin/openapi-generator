@@ -51,6 +51,9 @@ public abstract class OpenApiBuilder {
     }
     public abstract void  addToOpenApi(OpenApi api) ;
 
-    public abstract String toCurl(Function<String,Object> headerValueFactory, Function<String,Object> queryValueFactory, Supplier<String> requestBodyCacheGet);
+    public abstract String toCurl(Function<String,String> headerValueFactory,
+                                  Function<String,String> queryValueFactory,
+                                  Function<String,String> formDataValueFactory,
+                                  Supplier<String> requestBodyCacheGet);
     public abstract String toCurl();
 }

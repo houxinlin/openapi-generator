@@ -1,6 +1,7 @@
 package com.hxl.utils.openapi;
 
 import com.hxl.utils.curl.Curl;
+import com.hxl.utils.openapi.body.OpenApiFormDataRequestBodyNode;
 import com.hxl.utils.openapi.body.OpenApiRequestBodyNode;
 import com.hxl.utils.openapi.parameter.OpenApiHeaderParameter;
 import com.hxl.utils.openapi.parameter.OpenApiUrlParameter;
@@ -10,8 +11,6 @@ import com.hxl.utils.openapi.properties.desc.BasicPropertiesDescription;
 import com.hxl.utils.openapi.utils.BodyContentUtils;
 import com.hxl.utils.openapi.utils.JsonHashMap;
 
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiFunction;
@@ -32,20 +31,27 @@ public class OpenApiBuilderImpl extends BasicOpenApiBuilder {
             return result;
         }
     };
+
     public OpenApiBuilderImpl(String url, HttpMethod httpMethod) {
         super(url);
         this.httpMethod = httpMethod;
     }
+
     @Override
     public void addToOpenApi(OpenApi api) {
         api.putPath(new OpenApiPathItemNode(getUrl(), new OpenApiPathMethodNode(httpMethod, getOpenApiPathMethodDetailNode())));
     }
+
     @Override
     public String toCurl() {
-        return toCurl(s -> null, s -> null, () -> null);
+        return toCurl(s -> null, s -> null, s -> null, () -> null);
     }
+
     @Override
-    public String toCurl(Function<String, Object> headerValueFactory, Function<String, Object> queryValueFactory, Supplier<String> requestBodyCacheGet) {
+    public String toCurl(Function<String, String> headerValueFactory,
+                         Function<String, String> queryValueFactory,
+                         Function<String, String> formDataValueFactory,
+                         Supplier<String> requestBodyCacheGet) {
         Curl curl = new Curl(httpMethod, getUrl());
         OpenApiPathMethodDetailNode openApiPathMethodDetailNode = getOpenApiPathMethodDetailNode();
         if (openApiPathMethodDetailNode.get("parameters") != null) {
@@ -54,12 +60,12 @@ public class OpenApiBuilderImpl extends BasicOpenApiBuilder {
                 if (parameter instanceof OpenApiHeaderParameter) {
                     OpenApiHeaderParameter openApiHeaderParameter = (OpenApiHeaderParameter) parameter;
                     String name = openApiHeaderParameter.get("name").toString();
-                    curl.addHeader(name, Optional.ofNullable(headerValueFactory.apply(name).toString()).orElse(""));
+                    curl.addHeader(name, Optional.ofNullable(headerValueFactory.apply(name)).orElse(""));
                 }
                 if (parameter instanceof OpenApiUrlQueryParameter) {
                     OpenApiUrlQueryParameter openApiUrlQueryParameter = (OpenApiUrlQueryParameter) parameter;
                     String name = openApiUrlQueryParameter.get("name").toString();
-                    curl.addQuery(name, Optional.ofNullable(queryValueFactory.apply(name).toString()).orElse(""));
+                    curl.addQuery(name, Optional.ofNullable(queryValueFactory.apply(name)).orElse(""), httpMethod);
 
                 }
             }
@@ -77,11 +83,19 @@ public class OpenApiBuilderImpl extends BasicOpenApiBuilder {
                 if ("application/json".equalsIgnoreCase(requestBody.getRequestType())) {
                     curl.setRequestBody(requestBody.getRequestType(), cacheRequestBody == null ? getBodyFormJsonApplication(properties) : cacheRequestBody);
                 }
-                if ("application/x-www-form-urlencoded".equalsIgnoreCase(requestBody.getRequestType()) ||
-                        "multipart/form-data".equalsIgnoreCase(requestBody.getRequestType())) {
-                    curl.setRequestBody(requestBody.getRequestType(), cacheRequestBody == null ? getBodyFormUrlencoded(properties):cacheRequestBody);
+                if ("application/x-www-form-urlencoded".equalsIgnoreCase(requestBody.getRequestType())) {
+                    curl.setRequestBody(requestBody.getRequestType(), cacheRequestBody == null ? getBodyFormUrlencoded(properties) : cacheRequestBody);
                 }
-                curl.addHeaderIfMiss("content-type",requestBody.getRequestType());
+                if ("multipart/form-data".equalsIgnoreCase(requestBody.getRequestType())) {
+                    for (String key : properties.keySet()) {
+                        Object value = properties.get(key);
+                        if (value instanceof BasicPropertiesDescription) {
+                            Object type = ((BasicPropertiesDescription) value).get("type");
+                            curl.addFromData(key, Optional.ofNullable(formDataValueFactory.apply(key)).orElse(""), Type.file.equals(type));
+                        }
+                    }
+                }
+                curl.addHeaderIfMiss("content-type", requestBody.getRequestType());
             }
         }
         return curl.toString();

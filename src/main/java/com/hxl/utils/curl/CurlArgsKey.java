@@ -4,8 +4,11 @@ import java.util.function.Function;
 
 public enum CurlArgsKey {
     _H("-H", s -> "'"+s+"'"),//add header
-    _d("-d", s -> "'"+s+"'"),
-    _G_d("-G", s -> "-d '"+s+"'");
+    _d("-d", s -> "'"+s+"'"),//add request body
+    _G("-G", s -> ""),
+    _F("-F", s -> "\""+s+"\""),
+    _get_param("--data-urlencode",  s -> "'"+s+"'");
+//    _G_d("-G", s -> "-d '"+s+"'");
 
 
     private final String curlArgKey;
