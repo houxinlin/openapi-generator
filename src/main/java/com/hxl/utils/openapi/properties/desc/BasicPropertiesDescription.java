@@ -17,7 +17,7 @@ public class BasicPropertiesDescription extends PropertiesDescription {
 
     public Object doGetDefaultValue(BasicPropertiesDescription basicPropertiesDescription,BiFunction<BasicPropertiesDescription,OpenApiNode,Object> factory) {
         if (Type.string.toString().equalsIgnoreCase(basicPropertiesDescription.getOrDefault("type", "").toString())) {
-            return "\"\"";
+            return "";
         }
         if (Type.number.toString().equalsIgnoreCase(basicPropertiesDescription.getOrDefault("type", "").toString()) ||
                 Type.integer.toString().equalsIgnoreCase(basicPropertiesDescription.getOrDefault("type", "").toString())) {
@@ -25,15 +25,11 @@ public class BasicPropertiesDescription extends PropertiesDescription {
         }
         if (Type.object.toString().equalsIgnoreCase(basicPropertiesDescription.getOrDefault("type", "").toString())) {
             if (this.containsKey("properties")) {
-
-
                 OpenApiNode openApiNode = (OpenApiNode) get("properties");
-
                 return  factory.apply(this,openApiNode);
-//                fa.apply({})
             }
         }
-        return "\"\"";
+        return "";
     }
 
     public Object getDefaultValue(BiFunction<BasicPropertiesDescription,OpenApiNode,Object> factory) {

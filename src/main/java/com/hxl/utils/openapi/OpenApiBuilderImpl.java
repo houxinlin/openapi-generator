@@ -91,7 +91,7 @@ public class OpenApiBuilderImpl extends BasicOpenApiBuilder {
                         Object value = properties.get(key);
                         if (value instanceof BasicPropertiesDescription) {
                             Object type = ((BasicPropertiesDescription) value).get("type");
-                            curl.addFromData(key, Optional.ofNullable(formDataValueFactory.apply(key)).orElse(""), Type.file.equals(type));
+                            curl.addFromData(key, Optional.ofNullable(formDataValueFactory.apply(key)).orElse(""), Type.file.toString().equals(type));
                         }
                     }
                 }
