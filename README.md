@@ -41,6 +41,7 @@
         .addParameter(new OpenApiUrlQueryParameter("urlpaa", "asd", false, Type._boolean))
         .setRequestBody(openApiRequestBodyNode)
         .setResponse(openApiStatusCodeResponse).addToOpenApi(openApi);
+        //JSON.toJSONString(openapi);
 ```
 
 输出如下
